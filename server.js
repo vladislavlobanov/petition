@@ -3,6 +3,7 @@ const app = express();
 const db = require("./db");
 const hb = require("express-handlebars");
 var cookieSession = require("cookie-session");
+const csurf = require("csurf");
 var smthWrong;
 
 app.engine("handlebars", hb());
@@ -23,6 +24,13 @@ app.use(
         sameSite: true,
     })
 );
+
+app.use(csurf());
+
+app.use(function (req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
 
 app.use((req, res, next) => {
     if (
