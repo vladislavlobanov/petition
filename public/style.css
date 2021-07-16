@@ -1,3 +1,8 @@
 #signatureCanvas {
     background-color: yellow;
 }
+
+#sigPic {
+    width: 300;
+    height: 100;
+}

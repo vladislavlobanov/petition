@@ -16,20 +16,15 @@ module.exports.sendInputs = (first, last, signatures) => {
     );
 
     return db.query(
-        `INSERT INTO signatures (first, last, signature, date) VALUES ($1,$2,$3,$4)`,
+        `INSERT INTO signatures (first, last, signature, date) VALUES ($1,$2,$3,$4) RETURNING id`,
         [first, last, signatures, currentDate]
     );
 };
 
 module.exports.showSupporters = () => {
     return db.query("SELECT * FROM signatures");
-    // .then(function (result) {
-    //     var newArray = [];
-    //     for (var i = 0; i < result.rows.length; i++) {
-    //         newArray.push(`${result.rows[i].first} ${result.rows[i].last}`);
-    //     }
-    // })
-    // .catch(function (err) {
-    //     console.log(err);
-    // });
+};
+
+module.exports.getSignature = (id) => {
+    return db.query(`SELECT * FROM signatures WHERE id = ${id}`);
 };

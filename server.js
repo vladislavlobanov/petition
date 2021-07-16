@@ -2,9 +2,8 @@ const express = require("express");
 const app = express();
 const db = require("./db");
 const hb = require("express-handlebars");
-const cookieParser = require("cookie-parser");
+var cookieSession = require("cookie-session");
 var smthWrong;
-var arr;
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -15,21 +14,23 @@ app.use(
     })
 );
 
-app.use(cookieParser());
 app.use(express.static("./public"));
 
-app.use((req, res, next) => {
-    if (!req.cookies.signed && req.url != "/petition") {
-        res.redirect("/petition");
-    } else next(); // HANDLE 404 pages
+app.use(
+    cookieSession({
+        secret: `I'm always angry.`,
+        maxAge: 1000 * 60 * 60 * 24 * 14,
+        sameSite: true,
+    })
+);
 
-    // else if (
-    //     req.cookies.signed &&
-    //     req.url != "/petition/signed" &&
-    //     req.url != "/petition/supporters" // Create generic 404?
-    // ) {
-    //     res.redirect("/petition/signed");
-    // }
+app.use((req, res, next) => {
+    if (
+        !req.session.sigId &&
+        (req.url == "/petition/supporters" || req.url == "/petition/signed")
+    ) {
+        res.redirect("/petition");
+    } else next();
 });
 
 app.get("/", (req, res) => {
@@ -37,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if (req.cookies.signed) {
+    if (req.session.sigId) {
         res.redirect("/petition/signed");
     } else {
         smthWrong = false;
@@ -48,19 +49,36 @@ app.get("/petition", (req, res) => {
 });
 
 app.get("/petition/signed", (req, res) => {
-    res.render("signed", {
-        layout: "main",
-        arr,
+    var firstPromise = db.getSignature(req.session.sigId).then((results) => {
+        return results.rows[0].signature;
     });
+
+    var secondPromise = db.showSupporters().then((results) => {
+        return results.rows.length;
+    });
+
+    Promise.all([firstPromise, secondPromise])
+        .then((values) => {
+            var imgSig = values[0];
+            var numSigned = values[1];
+            res.render("signed", {
+                layout: "main",
+                imgSig,
+                numSigned,
+            });
+        })
+        .catch((err) => {
+            console.log("Error in one of the promises" + err); //showmessage smth went wrong STILL have to do it visually
+        });
 });
 
 app.get("/petition/supporters", (req, res) => {
     db.showSupporters().then((results) => {
-        arr = results.rows;
+        var arr = results.rows;
         res.render("supporters", {
             layout: "main",
             arr,
-        }); // HANDLE CATCH IF ERR
+        }); //showmessage smth went wrong STILL have to do it visually
     });
 });
 
@@ -81,9 +99,9 @@ app.post("/petition", (req, res) => {
             req.body.lastName,
             req.body.hiddenField
         )
-            .then(() => {
+            .then((rData) => {
                 smthWrong = false;
-                res.cookie("signed", true);
+                req.session.sigId = rData.rows[0].id;
                 res.redirect("/petition/signed");
             })
             .catch(() => {
@@ -94,6 +112,11 @@ app.post("/petition", (req, res) => {
                 });
             });
     }
+});
+
+app.get("*", (req, res) => {
+    res.statusCode = 404;
+    res.send("404 PAGE DOESN'T EXIST");
 });
 
 app.listen(8080, () => console.log("petition server is listening..."));

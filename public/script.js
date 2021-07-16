@@ -26,7 +26,7 @@
                 e.pageY - canvas.offset().top
             );
             ctx.stroke();
-            dataUrl.val(canvas.get(0).toDataURL("image/jpeg", 1.0));
+            dataUrl.val(canvas.get(0).toDataURL("image/png", 1.0));
             console.log(dataUrl.val());
         }
     });
