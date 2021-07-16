@@ -21,12 +21,15 @@ module.exports.sendInputs = (first, last, signatures) => {
     );
 };
 
-module.exports.showRows = (first, last, signatures) => {
-    db.query("SELECT * FROM signatures")
-        .then(function (result) {
-            console.log(result.rows);
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
+module.exports.showSupporters = () => {
+    return db.query("SELECT * FROM signatures");
+    // .then(function (result) {
+    //     var newArray = [];
+    //     for (var i = 0; i < result.rows.length; i++) {
+    //         newArray.push(`${result.rows[i].first} ${result.rows[i].last}`);
+    //     }
+    // })
+    // .catch(function (err) {
+    //     console.log(err);
+    // });
 };
