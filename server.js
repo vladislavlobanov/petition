@@ -121,10 +121,22 @@ app.post("/login", (req, res) => {
                     if (comparison == false) {
                         throw new Error("Password doesn't match");
                     } else {
-                        req.session.name = results.rows[0].first;
-                        req.session.surname = results.rows[0].last;
-                        req.session.user = results.rows[0].id;
-                        res.redirect("/petition");
+                        return db
+                            .findSignature(results.rows[0].id)
+                            .then((sig) => {
+                                if (sig.rows !== []) {
+                                    req.session.sigId = sig.rows[0].id;
+                                    req.session.name = results.rows[0].first;
+                                    req.session.surname = results.rows[0].last;
+                                    req.session.user = results.rows[0].id;
+                                    res.redirect("/petition");
+                                } else {
+                                    req.session.name = results.rows[0].first;
+                                    req.session.surname = results.rows[0].last;
+                                    req.session.user = results.rows[0].id;
+                                    res.redirect("/petition");
+                                }
+                            });
                     }
                 });
         })
