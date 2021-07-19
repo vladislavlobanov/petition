@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const db = require("./db");
 const hb = require("express-handlebars");
-var cookieSession = require("cookie-session");
 const csurf = require("csurf");
+const bcrypt = require("./bcrypt");
+const cookieSession = require("cookie-session"); // VAR?
+
 var smthWrong;
 
 app.engine("handlebars", hb());
@@ -46,14 +48,94 @@ app.get("/", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if (req.session.sigId) {
-        res.redirect("/petition/signed");
+    console.log(req.session);
+    if (!req.session.user) {
+        res.redirect("/register");
+    } else {
+        if (req.session.sigId) {
+            res.redirect("/petition/signed");
+        } else {
+            smthWrong = false;
+            res.render("welcome", {
+                layout: "main",
+            });
+        }
+    }
+});
+
+app.get("/register", (req, res) => {
+    if (req.session.user) {
+        res.redirect("/petition");
     } else {
         smthWrong = false;
-        res.render("welcome", {
+        res.render("register", {
             layout: "main",
         });
     }
+});
+
+app.post("/register", (req, res) => {
+    bcrypt
+        .hash(req.body.password)
+        .then((hashPwd) => {
+            return db
+                .registration(
+                    req.body.firstName,
+                    req.body.lastName,
+                    req.body.email,
+                    hashPwd
+                )
+                .then((userId) => {
+                    req.session.user = userId.rows[0].id;
+                    req.session.name = req.body.firstName;
+                    req.session.surname = req.body.lastName;
+                    res.redirect("/petition");
+                });
+        })
+        .catch((err) => {
+            smthWrong = true;
+            res.render("register", {
+                layout: "main",
+                smthWrong,
+            });
+        });
+});
+
+app.get("/login", (req, res) => {
+    if (req.session.user) {
+        res.redirect("/petition");
+    } else {
+        smthWrong = false;
+        res.render("login", {
+            layout: "main",
+        });
+    }
+});
+
+app.post("/login", (req, res) => {
+    db.findUser(req.body.email)
+        .then((results) => {
+            return bcrypt
+                .compare(req.body.password, results.rows[0].hashed_password)
+                .then((comparison) => {
+                    if (comparison == false) {
+                        throw new Error("Password doesn't match");
+                    } else {
+                        req.session.name = results.rows[0].first;
+                        req.session.surname = results.rows[0].last;
+                        req.session.user = results.rows[0].id;
+                        res.redirect("/petition");
+                    }
+                });
+        })
+        .catch((err) => {
+            smthWrong = true;
+            console.log(err);
+            res.render("login", {
+                layout: "main",
+                smthWrong,
+            });
+        });
 });
 
 app.get("/petition/signed", (req, res) => {
@@ -65,7 +147,7 @@ app.get("/petition/signed", (req, res) => {
         return results.rows.length;
     });
 
-    Promise.all([firstPromise, secondPromise])
+    Promise.all([firstPromise, secondPromise]) //MAYBE REWRITE USING A CHAIN
         .then((values) => {
             var imgSig = values[0];
             var numSigned = values[1];
@@ -91,11 +173,7 @@ app.get("/petition/supporters", (req, res) => {
 });
 
 app.post("/petition", (req, res) => {
-    if (
-        req.body.firstName == "" ||
-        req.body.lastName == "" ||
-        req.body.hiddenField == ""
-    ) {
+    if (req.body.hiddenField == "") {
         smthWrong = true;
         res.render("welcome", {
             layout: "main",
@@ -103,8 +181,9 @@ app.post("/petition", (req, res) => {
         });
     } else {
         db.sendInputs(
-            req.body.firstName,
-            req.body.lastName,
+            req.session.name,
+            req.session.surname,
+            req.session.user,
             req.body.hiddenField
         )
             .then((rData) => {
@@ -112,7 +191,8 @@ app.post("/petition", (req, res) => {
                 req.session.sigId = rData.rows[0].id;
                 res.redirect("/petition/signed");
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 smthWrong = true;
                 res.render("welcome", {
                     layout: "main",
