@@ -37,16 +37,19 @@ module.exports.showSupporters = () => {
 };
 
 module.exports.showCity = (city) => {
-    return db.query(`SELECT users.first AS firstName, users.last AS lastName, signatures.signature AS signature, profiles.age AS age, profiles.city AS city, profiles.homepage AS homepage 
+    return db.query(
+        `SELECT users.first AS firstName, users.last AS lastName, signatures.signature AS signature, profiles.age AS age, profiles.city AS city, profiles.homepage AS homepage 
     FROM users 
     INNER JOIN signatures ON users.id = signatures.user_id
     INNER JOIN profiles ON signatures.user_id = profiles.user_id
-    WHERE profiles.city = '${city}';
-    `);
+    WHERE profiles.city = ($1);
+    `,
+        [city]
+    );
 };
 
 module.exports.getSignature = (id) => {
-    return db.query(`SELECT * FROM signatures WHERE id = ${id}`);
+    return db.query(`SELECT * FROM signatures WHERE id = ($1)`, [id]);
 };
 
 module.exports.registration = (first, last, email, password) => {
@@ -70,8 +73,11 @@ module.exports.registration = (first, last, email, password) => {
 };
 
 module.exports.findUser = (email) => {
-    return db.query(`SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
+    return (
+        db.query(`SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
     FROM users
     LEFT JOIN signatures ON users.id = signatures.user_id
-    WHERE email = '${email}'`);
+    WHERE email = ($1)`),
+        [email]
+    );
 };

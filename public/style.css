@@ -3,13 +3,13 @@
 * {
     margin: 0;
     box-sizing: border-box;
-
     font-family: "Rubik", sans-serif;
 }
 
 body {
-    overflow: hidden;
+    background-color: #2b2d42;
 }
+
 #signatureCanvas {
     background-color: yellow;
 }
@@ -114,22 +114,22 @@ main {
 }
 
 h1 {
-    font-size: 3.5em;
+    /* font-size:3,5rem */
     width: 80%;
     border-radius: 10px;
-    color: #d90429;
+    color: #ef233c;
 }
 
 h1::after {
     content: " ";
-    border-top: 5px solid #edf2f4;
+    border-top: 5px solid #d90429;
     display: block;
 }
 
 .insideContainer {
     display: grid;
     gap: 20px;
-    height: 100%;
+    height: fit-content;
 }
 
 label {
@@ -190,3 +190,53 @@ canvas {
     grid-row: 3;
     background-color: #2b2d42;
 }
+
+/* REGISTRATION */
+
+.bannerRegister {
+    background-color: #d90429;
+    color: white;
+    font-size: 30px;
+    transform: skew(-20deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.insideframeHolder {
+    width: 40rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.frameHolder {
+    padding: 2em;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.frame {
+    background-color: #8d99ae;
+
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.frameContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.regEl {
+    background-color: #edf2f4;
+    border-radius: 10px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* REGISTRATION END */

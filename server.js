@@ -115,7 +115,7 @@ app.post("/register", (req, res) => {
 
 app.get("/profile", (req, res) => {
     if (!req.session.user) {
-        res.redirect("/petition");
+        res.redirect("/register");
     } else {
         smthWrong = false;
         res.render("profile", {
