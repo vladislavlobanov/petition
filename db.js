@@ -1,7 +1,7 @@
 var spicedPg = require("spiced-pg");
 var db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
-module.exports.sendInputs = (first, last, user_id, signatures) => {
+module.exports.sendInputs = (user_id, signatures) => {
     var options = {
         year: "numeric",
         month: "long",
@@ -16,13 +16,33 @@ module.exports.sendInputs = (first, last, user_id, signatures) => {
     );
 
     return db.query(
-        `INSERT INTO signatures (first, last, user_id, signature, date) VALUES ($1,$2,$3,$4,$5) RETURNING id`,
-        [first, last, user_id, signatures, currentDate]
+        `INSERT INTO signatures (user_id, signature, date) VALUES ($1,$2,$3) RETURNING id`,
+        [user_id, signatures, currentDate]
+    );
+};
+
+module.exports.sendAddition = (age, city, homepage, user_id) => {
+    return db.query(
+        `INSERT INTO profiles (age, city, homepage, user_id) VALUES ($1,$2,$3,$4)`,
+        [age, city, homepage, user_id]
     );
 };
 
 module.exports.showSupporters = () => {
-    return db.query("SELECT * FROM signatures");
+    return db.query(`SELECT users.first AS firstName, users.last AS lastName, signatures.signature AS signature, profiles.age AS age, profiles.city AS city, profiles.homepage AS homepage
+    FROM users
+    INNER JOIN signatures ON users.id = signatures.user_id
+    INNER JOIN profiles ON signatures.user_id = profiles.user_id;
+    `);
+};
+
+module.exports.showCity = (city) => {
+    return db.query(`SELECT users.first AS firstName, users.last AS lastName, signatures.signature AS signature, profiles.age AS age, profiles.city AS city, profiles.homepage AS homepage 
+    FROM users 
+    INNER JOIN signatures ON users.id = signatures.user_id
+    INNER JOIN profiles ON signatures.user_id = profiles.user_id
+    WHERE profiles.city = '${city}';
+    `);
 };
 
 module.exports.getSignature = (id) => {
@@ -50,9 +70,8 @@ module.exports.registration = (first, last, email, password) => {
 };
 
 module.exports.findUser = (email) => {
-    return db.query(`SELECT * FROM users WHERE email = '${email}'`);
-};
-
-module.exports.findSignature = (userId) => {
-    return db.query(`SELECT * FROM signatures WHERE user_id = '${userId}'`);
+    return db.query(`SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
+    FROM users
+    LEFT JOIN signatures ON users.id = signatures.user_id
+    WHERE email = '${email}'`);
 };

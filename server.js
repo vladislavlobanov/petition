@@ -48,7 +48,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    console.log(req.session);
     if (!req.session.user) {
         res.redirect("/register");
     } else {
@@ -75,26 +74,71 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    bcrypt
-        .hash(req.body.password)
-        .then((hashPwd) => {
-            return db
-                .registration(
-                    req.body.firstName,
-                    req.body.lastName,
-                    req.body.email,
-                    hashPwd
-                )
-                .then((userId) => {
-                    req.session.user = userId.rows[0].id;
-                    req.session.name = req.body.firstName;
-                    req.session.surname = req.body.lastName;
-                    res.redirect("/petition");
+    if (
+        !req.body.firstName ||
+        !req.body.lastName ||
+        !req.body.email ||
+        !req.body.password
+    ) {
+        smthWrong = true;
+        res.render("register", {
+            layout: "main",
+            smthWrong,
+        });
+    } else {
+        bcrypt
+            .hash(req.body.password)
+            .then((hashPwd) => {
+                return db
+                    .registration(
+                        req.body.firstName,
+                        req.body.lastName,
+                        req.body.email,
+                        hashPwd
+                    )
+                    .then((userId) => {
+                        req.session.user = userId.rows[0].id;
+                        req.session.name = req.body.firstName;
+                        req.session.surname = req.body.lastName;
+                        res.redirect("/profile");
+                    });
+            })
+            .catch((err) => {
+                smthWrong = true;
+                res.render("register", {
+                    layout: "main",
+                    smthWrong,
                 });
+            });
+    }
+});
+
+app.get("/profile", (req, res) => {
+    if (!req.session.user) {
+        res.redirect("/petition");
+    } else {
+        smthWrong = false;
+        res.render("profile", {
+            layout: "main",
+            smthWrong,
+        });
+    }
+});
+
+app.post("/profile", (req, res) => {
+    db.sendAddition(
+        req.body.age ? req.body.age : null,
+        req.body.city ? req.body.city : null,
+        req.body.homepage ? req.body.homepage : null,
+        req.session.user
+    )
+        .then(() => {
+            res.redirect("/petition");
         })
         .catch((err) => {
             smthWrong = true;
-            res.render("register", {
+            console.log(err);
+            res.render("profile", {
                 layout: "main",
                 smthWrong,
             });
@@ -108,46 +152,51 @@ app.get("/login", (req, res) => {
         smthWrong = false;
         res.render("login", {
             layout: "main",
+            smthWrong,
         });
     }
 });
 
 app.post("/login", (req, res) => {
-    db.findUser(req.body.email)
-        .then((results) => {
-            return bcrypt
-                .compare(req.body.password, results.rows[0].hashed_password)
-                .then((comparison) => {
-                    if (comparison == false) {
-                        throw new Error("Password doesn't match");
-                    } else {
-                        return db
-                            .findSignature(results.rows[0].id)
-                            .then((sig) => {
-                                if (sig.rows !== []) {
-                                    req.session.sigId = sig.rows[0].id;
-                                    req.session.name = results.rows[0].first;
-                                    req.session.surname = results.rows[0].last;
-                                    req.session.user = results.rows[0].id;
-                                    res.redirect("/petition");
-                                } else {
-                                    req.session.name = results.rows[0].first;
-                                    req.session.surname = results.rows[0].last;
-                                    req.session.user = results.rows[0].id;
-                                    res.redirect("/petition");
-                                }
-                            });
-                    }
-                });
-        })
-        .catch((err) => {
-            smthWrong = true;
-            console.log(err);
-            res.render("login", {
-                layout: "main",
-                smthWrong,
-            });
+    if (!req.body.email || !req.body.password) {
+        smthWrong = true;
+        res.render("register", {
+            layout: "main",
+            smthWrong,
         });
+    } else {
+        db.findUser(req.body.email)
+            .then((results) => {
+                return bcrypt
+                    .compare(req.body.password, results.rows[0].hashed_password)
+                    .then((comparison) => {
+                        if (comparison == false) {
+                            throw new Error("Password doesn't match");
+                        } else {
+                            if (results.rows[0].signature) {
+                                req.session.sigId = results.rows[0].sigid;
+                                req.session.name = results.rows[0].first;
+                                req.session.surname = results.rows[0].last;
+                                req.session.user = results.rows[0].id;
+                                res.redirect("/petition");
+                            } else {
+                                req.session.name = results.rows[0].first;
+                                req.session.surname = results.rows[0].last;
+                                req.session.user = results.rows[0].id;
+                                res.redirect("/petition");
+                            }
+                        }
+                    });
+            })
+            .catch((err) => {
+                smthWrong = true;
+                console.log(err);
+                res.render("login", {
+                    layout: "main",
+                    smthWrong,
+                });
+            });
+    }
 });
 
 app.get("/petition/signed", (req, res) => {
@@ -184,6 +233,22 @@ app.get("/petition/supporters", (req, res) => {
     });
 });
 
+app.get("/petition/:city", (req, res) => {
+    if (!req.session.sigId) {
+        res.redirect("/petition");
+    } else {
+        const { city: cityParam } = req.params;
+        db.showCity(cityParam).then((results) => {
+            var arr = results.rows;
+            res.render("supporters-by-city", {
+                layout: "main",
+                cityParam,
+                arr,
+            }); //showmessage smth went wrong STILL have to do it visually
+        });
+    }
+});
+
 app.post("/petition", (req, res) => {
     if (req.body.hiddenField == "") {
         smthWrong = true;
@@ -192,12 +257,7 @@ app.post("/petition", (req, res) => {
             smthWrong,
         });
     } else {
-        db.sendInputs(
-            req.session.name,
-            req.session.surname,
-            req.session.user,
-            req.body.hiddenField
-        )
+        db.sendInputs(req.session.user, req.body.hiddenField)
             .then((rData) => {
                 smthWrong = false;
                 req.session.sigId = rData.rows[0].id;

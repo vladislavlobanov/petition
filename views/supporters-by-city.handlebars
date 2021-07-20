@@ -1,4 +1,4 @@
-<h1>SUPPORTERS TEXT</h1>
+<h1>SUPPORTERS TEXT from {{cityParam}}</h1>
 <ol>
     {{#arr}}
         <li>
@@ -12,14 +12,6 @@
                 {{lastname}}
             {{/if}}
             {{#if age}} {{age}} {{/if}}
-
-            {{#if city}}
-                <a
-                    href="
-                {{city}}"
-                >{{city}}
-                </a>
-
-            {{/if}}</li>
+        </li>
     {{/arr}}
 </ol>
