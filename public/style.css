@@ -176,7 +176,7 @@ canvas {
 
 .thanks .inside {
     grid-row: 2;
-    background-image: url("assets/thanks.jpeg");
+    /* background-image: url("assets/thanks.jpeg"); */
     background-position: 20% 67%;
     background-size: cover;
 }

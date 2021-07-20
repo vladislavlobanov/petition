@@ -1,17 +1,35 @@
-<h1>SUPPORTERS TEXT from {{cityParam}}</h1>
-<ol>
-    {{#arr}}
-        <li>
-            {{#if homepage}}<a
-                    href="
-                {{homepage}}"
-                >{{firstname}}
-                    {{lastname}}</a>
-            {{else}}
-                {{firstname}}
-                {{lastname}}
-            {{/if}}
-            {{#if age}} {{age}} {{/if}}
-        </li>
-    {{/arr}}
-</ol>
+<div class="frameHolder">
+
+    <div class="insideframeHolder">
+        <div class="frame">
+
+            <div class="frameContainer" method="POST">
+
+                <h1 class="regEl">Supporters from {{cityParam}}</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
+
+                <div class="regEl">
+                    <ol>
+                        {{#arr}}
+                            <li>
+                                {{#if homepage}}<a
+                                        href="{{homepage}}"
+                                    >{{firstname}}
+                                        {{lastname}}</a>
+                                {{else}}
+                                    {{firstname}}
+                                    {{lastname}}
+                                {{/if}}
+                                {{#if age}} {{age}} {{/if}}
+                            </li>
+                        {{/arr}}
+                    </ol>
+
+                </div>
+
+                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            </div>
+
+        </div></div>
+
+</div>

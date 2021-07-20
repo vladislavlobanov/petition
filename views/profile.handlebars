@@ -1,7 +1,18 @@
-<form class="insideContainer" method="POST">
-    <h1>Now please tell us just a littlbe bit more about yourself</h1>
-    {{>error status=smthWrong}} 
-    <div class="nameContainer">
+<div class="frameHolder">
+
+    <div class="insideframeHolder">    
+    <div class="frame">
+
+        <form class="frameContainer" method="POST">
+            
+            <h1 class="regEl">Now please tell us just a littlbe bit more about yourself</h1>
+                    <div class="bannerRegister">#FREENAVALNY</div>
+
+            <div class="regEl">
+
+          
+                {{>error status=smthWrong}} 
+              <div class="nameContainer">
 
         <div>
             <label for="ageId">Age:</label>
@@ -13,10 +24,15 @@
         <div>
             <label for="homepageId">Homepage:</label>
 
-             <input type="url" pattern="https?://.+" id="homapageId" name="homepage">
+             <input type="text" pattern="https?://.+" id="homapageId" name="homepage">
 
     </div>
 
-    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-    <button>CONTINUE</button>
-</form>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+               <button>CONTINUE</button>
+
+        </form>
+
+    </div></div>
+
+</div>

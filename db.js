@@ -73,11 +73,11 @@ module.exports.registration = (first, last, email, password) => {
 };
 
 module.exports.findUser = (email) => {
-    return (
-        db.query(`SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
+    return db.query(
+        `SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
     FROM users
     LEFT JOIN signatures ON users.id = signatures.user_id
-    WHERE email = ($1)`),
+    WHERE email = ($1)`,
         [email]
     );
 };

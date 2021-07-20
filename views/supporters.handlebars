@@ -1,25 +1,44 @@
-<h1>SUPPORTERS TEXT</h1>
-<ol>
-    {{#arr}}
-        <li>
-            {{#if homepage}}<a
-                    href="
+<div class="frameHolder">
+
+    <div class="insideframeHolder">
+        <div class="frame">
+
+            <div class="frameContainer" method="POST">
+
+                <h1 class="regEl">All supporters</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
+
+                <div class="regEl">
+                    <ol>
+                        {{#arr}}
+                            <li>
+                                {{#if homepage}}<a
+                                        href="
                 {{homepage}}"
-                >{{firstname}}
-                    {{lastname}}</a>
-            {{else}}
-                {{firstname}}
-                {{lastname}}
-            {{/if}}
-            {{#if age}} {{age}} {{/if}}
+                                    >{{firstname}}
+                                        {{lastname}}</a>
+                                {{else}}
+                                    {{firstname}}
+                                    {{lastname}}
+                                {{/if}}
+                                {{#if age}} {{age}} {{/if}}
 
-            {{#if city}}
-                <a
-                    href="
+                                {{#if city}}
+                                    <a
+                                        href="
                 {{city}}"
-                >{{city}}
-                </a>
+                                    >{{city}}
+                                    </a>
 
-            {{/if}}</li>
-    {{/arr}}
-</ol>
+                                {{/if}}</li>
+                        {{/arr}}
+                    </ol>
+
+                </div>
+
+                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            </div>
+
+        </div></div>
+
+</div>
