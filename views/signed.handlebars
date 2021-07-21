@@ -6,7 +6,15 @@
             <img src="{{imgSig}}" alt="signature" />
             <a href="/petition/supporters">SEE ALL
                 {{numSigned}}
-                SUPPORTERS</a></div>
+                SUPPORTERS</a>
+                <a href="/edit">Edit my profile</a></div>
+
+                </div>
+                 
+        <form method="POST">
+            <button>DELETE MY SIGNATURE</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+        </form>
     </div>
 
     <div class="row3"></div>

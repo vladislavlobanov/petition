@@ -227,6 +227,13 @@ app.get("/petition/signed", (req, res) => {
         });
 });
 
+app.post("/petition/signed", (req, res) => {
+    db.deleteSignature(req.session.user).then(() => {
+        req.session.sigId = "";
+        res.redirect("/petition");
+    });
+});
+
 app.get("/petition/supporters", (req, res) => {
     db.showSupporters().then((results) => {
         var arr = results.rows;

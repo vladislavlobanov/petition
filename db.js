@@ -19,14 +19,14 @@ module.exports.sendInputs = (user_id, signatures) => {
     );
 
     return db.query(
-        `INSERT INTO signatures (user_id, signature, date) VALUES ($1,$2,$3) RETURNING id`,
+        `INSERT INTO signatures (user_id, signature, date) VALUES ($1,$2,$3) RETURNING id;`,
         [user_id, signatures, currentDate]
     );
 };
 
 module.exports.sendAddition = (age, city, homepage, user_id) => {
     return db.query(
-        `INSERT INTO profiles (age, city, homepage, user_id) VALUES ($1,$2,$3,$4)`,
+        `INSERT INTO profiles (age, city, homepage, user_id) VALUES ($1,$2,$3,$4);`,
         [age, city, homepage, user_id]
     );
 };
@@ -52,7 +52,7 @@ module.exports.showCity = (city) => {
 };
 
 module.exports.getSignature = (id) => {
-    return db.query(`SELECT * FROM signatures WHERE id = ($1)`, [id]);
+    return db.query(`SELECT * FROM signatures WHERE id = ($1);`, [id]);
 };
 
 module.exports.registration = (first, last, email, password) => {
@@ -70,7 +70,7 @@ module.exports.registration = (first, last, email, password) => {
     );
 
     return db.query(
-        `INSERT INTO users (first, last, email, hashed_password, date) VALUES ($1,$2,$3,$4,$5) RETURNING id`,
+        `INSERT INTO users (first, last, email, hashed_password, date) VALUES ($1,$2,$3,$4,$5) RETURNING id;`,
         [first, last, email, password, currentDate]
     );
 };
@@ -80,7 +80,7 @@ module.exports.findUser = (email) => {
         `SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
     FROM users
     LEFT JOIN signatures ON users.id = signatures.user_id
-    WHERE users.email = ($1)`,
+    WHERE users.email = ($1);`,
         [email]
     );
 };
@@ -90,7 +90,7 @@ module.exports.provideInfo = (id) => {
         `SELECT users.first AS firstName, users.last AS lastName, users.email AS email, profiles.age AS age, profiles.city as city, profiles.homepage AS homepage
         FROM users
         INNER JOIN profiles ON users.id = profiles.user_id
-        WHERE users.id = ($1)`,
+        WHERE users.id = ($1);`,
         [id]
     );
 };
@@ -134,4 +134,8 @@ module.exports.makeUpdatesWPwd = (
 `,
         [first, last, email, password, idData, age, city, homepage]
     );
+};
+
+module.exports.deleteSignature = (id) => {
+    return db.query(`DELETE FROM signatures WHERE user_id = ($1);`, [id]);
 };
