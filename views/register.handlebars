@@ -1,66 +1,66 @@
 <div class="frameHolder">
 
-    <div class="insideframeHolder">    
-    <div class="frame">
+    <div class="insideframeHolder">
+        <div class="frame">
 
-        <form class="frameContainer" method="POST">
-            
-            <h1 class="regEl">REGISTRATION</h1>
-                    <div class="bannerRegister">#FREENAVALNY</div>
+            <form class="frameContainer" method="POST">
 
-            <div class="regEl">
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Iusto rerum eaque suscipit assumenda ipsa sapiente excepturi
-                    cumque illo, aliquid aliquam?</p>
-                {{>error status=smthWrong}} 
+                <h1 class="regEl">REGISTRATION</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
 
-                <div class="nameContainer">
-                    <div>
-                        <label for="firstNameId">First name:</label>
-                        <input
-                            type="text"
-                            id="firstNameId"
-                            name="firstName"
-                            required
-                        /></div>
-                    <div>
-                        <label for="lastNameId">Last name:</label>
-                        <input
-                            type="text"
-                            id="lastNameId"
-                            name="lastName"
-                            required
-                        />
+                <div class="regEl">
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                        Iusto rerum eaque suscipit assumenda ipsa sapiente
+                        excepturi cumque illo, aliquid aliquam?</p>
+                   {{>error status=smthWrong}} 
+                    <div class="nameContainer">
+                        <div>
+                            <label for="firstNameId">First name:</label>
+                            <input
+                                type="text"
+                                id="firstNameId"
+                                name="firstName"
+                                required
+                            /></div>
+                        <div>
+                            <label for="lastNameId">Last name:</label>
+                            <input
+                                type="text"
+                                id="lastNameId"
+                                name="lastName"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label for="emailId">Email address:</label>
+                            <input
+                                type="text"
+                                id="emailId"
+                                name="email"
+                                placeholder="your@email.com"
+                                pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                                required
+                            /></div>
+
+                        <div>
+                            <label for="passwordId">Password:</label>
+                            <input
+                                type="password"
+                                id="passwordId"
+                                name="password"
+                                required
+                            /></div>
+
                     </div>
 
-                    <div>
-                        <label for="emailId">Email address:</label>
-                        <input
-                            type="text"
-                            id="emailId"
-                            name="email"
-                            placeholder="your@email.com"
-                            required  
-                        /></div>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <button> SIGN UP </button>
+                    <p>If you are already a member, please
+                        <a href="/login">log in</a></p></div>
 
-                    <div>
-                        <label for="passwordId">Password:</label>
-                        <input
-                            type="password"
-                            id="passwordId"
-                            name="password"
-                            required
-                        /></div>
+            </form>
 
-                </div>
-
-                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-                <button> SIGN UP </button>
-                <p>If you are already a member, please
-                    <a href="/login">log in</a></p></div>
-
-        </form>
-
-    </div></div>
+        </div></div>
 
 </div>

@@ -1,22 +1,23 @@
-<div class="thanks">
-    <div class="row1">
-    </div>
-    <div class="row2">
-        <div class="thanks inside"><h1>Thank you for your signature</h1>
-            <img src="{{imgSig}}" alt="signature" />
-            <a href="/petition/supporters">SEE ALL
-                {{numSigned}}
-                SUPPORTERS</a>
-                <a href="/edit">Edit my profile</a></div>
+<div class="frameHolder">
+    <div class="insideframeHolder">
+        <div class="frame">
 
+            <form class="frameContainer" method="POST">
+
+                <h1 class="regEl">Thank you for signing!</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
+
+                <div class="regEl">
+
+                    <img src="{{imgSig}}" alt="signature" />
+                    <div><a href="/petition/supporters">SEE ALL
+                            {{numSigned}}
+                            SUPPORTERS</a></div>
+                    <div><a href="/edit">Edit my profile</a></div>
+                    <button>DELETE MY SIGNATURE</button>
                 </div>
-                 
-        <form method="POST">
-            <button>DELETE MY SIGNATURE</button>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-        </form>
-    </div>
-
-    <div class="row3"></div>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            </form>
+        </div></div>
 
 </div>

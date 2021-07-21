@@ -1,20 +1,41 @@
-<form class="insideContainer" method="POST">
-    <h1>Please log in</h1>
+<div class="frameHolder">
 
-    {{>error status=smthWrong}} 
+    <div class="insideframeHolder">
+        <div class="frame">
+            <form class="frameContainer" method="POST">
 
-    <div class="nameContainer">
-     
-        <div>
-            <label for="emailId">Email address:</label>
-            <input type="text" id="emailId" name="email" placeholder="your@email.com" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" required/></div>
+                <h1 class="regEl">Please log in</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
 
-        <div>
-            <label for="passwordId">Password:</label>
-            <input type="password"type="text" id="passwordId" name="password" required/></div>
+                <div class="regEl">
+                {{>error status=smthWrong}} 
+                    <div>
+                        <label for="emailId">Email address:</label>
+                        <input
+                            type="text"
+                            id="emailId"
+                            name="email"
+                            placeholder="your@email.com"
+                            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                            required
+                        /></div>
 
-    </div>
+                    <div>
+                        <label for="passwordId">Password:</label>
+                        <input
+                            type="password"
+                            type="text"
+                            id="passwordId"
+                            name="password"
+                            required
+                        />
+                    </div>
 
-    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-    <button>LOG IN</button>
-</form>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <button>LOG IN</button>
+                </div>
+
+            </form>
+        </div></div>
+
+</div>
