@@ -30,4 +30,4 @@ CREATE TABLE profiles (
     city      TEXT,
     homepage  TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);

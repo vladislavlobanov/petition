@@ -1,0 +1,88 @@
+<div class="frameHolder">
+
+    <div class="insideframeHolder">
+        <div class="frame">
+
+            <form class="frameContainer" method="POST">
+
+                <h1 class="regEl">Edit your profile</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
+
+                <div class="regEl">
+                    <div class="nameContainer">
+                        <div>
+                            <label for="firstNameId">First name:</label>
+                            <input
+                                type="text"
+                                id="firstNameId"
+                                name="firstName"
+                                value="{{firstname}}"
+                                required
+                            /></div>
+                        <div>
+                            <label for="lastNameId">Last name:</label>
+                            <input
+                                type="text"
+                                id="lastNameId"
+                                name="lastName"
+                                value="{{lastname}}"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label for="emailId">Email address:</label>
+                            <input
+                                type="text"
+                                id="emailId"
+                                name="email"
+                                placeholder="your@email.com"
+                                value="{{email}}"
+                                required
+                            /></div>
+
+                        <div>
+                            <label for="passwordId">Password:</label>
+                            <input
+                                type="password"
+                                id="passwordId"
+                                name="password"
+                            /></div>
+
+                        <div>
+                            <label for="ageId">Age:</label>
+                            <input
+                                type="number"
+                                id="ageId"
+                                name="age"
+                                min="18"
+                                max="100"
+                                value="{{age}}"
+                            /></div>
+
+                        <div>
+                            <label for="cityId">City:</label>
+                            <input type="text" id="cityId" name="city" value="{{city}}" /></div>
+                        <div>
+                            <label for="homepageId">Homepage:</label>
+
+                            <input
+                                type="text"
+                                pattern="https?://.+"
+                                id="homapageId"
+                                name="homepage"
+                                placeholder="http://example.com"
+                                value="{{homepage}}"
+                            />
+
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <button>Submit</button>
+            </form>
+
+        </div></div>
+
+</div>

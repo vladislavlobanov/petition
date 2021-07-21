@@ -1,5 +1,8 @@
 var spicedPg = require("spiced-pg");
-var db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+var db = spicedPg(
+    process.env.DATABASE_URL ||
+        "postgres:postgres:postgres@localhost:5432/petition"
+);
 
 module.exports.sendInputs = (user_id, signatures) => {
     var options = {
@@ -77,7 +80,17 @@ module.exports.findUser = (email) => {
         `SELECT users.first AS firstName, users.last AS lastName, users.id as id, users.hashed_password AS hashed_password, signatures.signature as signature, signatures.id as sigid
     FROM users
     LEFT JOIN signatures ON users.id = signatures.user_id
-    WHERE email = ($1)`,
+    WHERE users.email = ($1)`,
         [email]
+    );
+};
+
+module.exports.provideInfo = (id) => {
+    return db.query(
+        `SELECT users.first AS firstName, users.last AS lastName, users.email AS email, profiles.age AS age, profiles.city as city, profiles.homepage AS homepage
+        FROM users
+        INNER JOIN profiles ON users.id = profiles.user_id
+        WHERE users.id = ($1)`,
+        [id]
     );
 };

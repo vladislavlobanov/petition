@@ -274,9 +274,32 @@ app.post("/petition", (req, res) => {
     }
 });
 
+app.get("/edit", (req, res) => {
+    if (!req.session.user) {
+        res.redirect("/register");
+    } else {
+        db.provideInfo(req.session.user).then((results) => {
+            const { firstname, lastname, email, age, city, homepage } =
+                results.rows[0];
+
+            res.render("edit", {
+                layout: "main",
+                firstname,
+                lastname,
+                email,
+                age,
+                city,
+                homepage,
+            });
+        });
+    }
+});
+
 app.get("*", (req, res) => {
     res.statusCode = 404;
     res.send("404 PAGE DOESN'T EXIST");
 });
 
-app.listen(8080, () => console.log("petition server is listening..."));
+app.listen(process.env.PORT || 8080, () =>
+    console.log("petition server is listening...")
+);
