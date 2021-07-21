@@ -126,23 +126,27 @@ app.get("/profile", (req, res) => {
 });
 
 app.post("/profile", (req, res) => {
-    db.sendAddition(
-        req.body.age ? req.body.age : null,
-        req.body.city ? req.body.city : null,
-        req.body.homepage ? req.body.homepage : null,
-        req.session.user
-    )
-        .then(() => {
-            res.redirect("/petition");
-        })
-        .catch((err) => {
-            smthWrong = true;
-            console.log(err);
-            res.render("profile", {
-                layout: "main",
-                smthWrong,
+    if (!req.body.age && !req.body.city && !req.body.homepage) {
+        res.redirect("/petition");
+    } else {
+        db.sendAddition(
+            req.body.age ? req.body.age : null,
+            req.body.city ? req.body.city : null,
+            req.body.homepage ? req.body.homepage : null,
+            req.session.user
+        )
+            .then(() => {
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                smthWrong = true;
+                console.log(err);
+                res.render("profile", {
+                    layout: "main",
+                    smthWrong,
+                });
             });
-        });
+    }
 });
 
 app.get("/login", (req, res) => {
@@ -278,20 +282,58 @@ app.get("/edit", (req, res) => {
     if (!req.session.user) {
         res.redirect("/register");
     } else {
-        db.provideInfo(req.session.user).then((results) => {
-            const { firstname, lastname, email, age, city, homepage } =
-                results.rows[0];
+        db.provideInfo(req.session.user)
+            .then((results) => {
+                const { firstname, lastname, email, age, city, homepage } =
+                    results.rows[0];
 
-            res.render("edit", {
-                layout: "main",
-                firstname,
-                lastname,
-                email,
-                age,
-                city,
-                homepage,
-            });
-        });
+                res.render("edit", {
+                    layout: "main",
+                    firstname,
+                    lastname,
+                    email,
+                    age,
+                    city,
+                    homepage,
+                });
+            })
+            .catch((err) => console.log(err));
+    }
+});
+
+app.post("/edit", (req, res) => {
+    if (req.body.password) {
+        bcrypt
+            .hash(req.body.password)
+            .then((hashPwd) => {
+                db.makeUpdatesWPwd(
+                    req.body.firstName,
+                    req.body.lastName,
+                    req.body.email,
+                    hashPwd,
+                    req.body.age || null,
+                    req.body.city || null,
+                    req.body.homepage || null,
+                    req.session.user
+                ).then(() => {
+                    res.redirect("/petition/supporters");
+                });
+            })
+            .catch((err) => console.log(err));
+    } else {
+        db.makeUpdatesNoPwd(
+            req.body.firstName,
+            req.body.lastName,
+            req.body.email,
+            req.body.age || null,
+            req.body.city || null,
+            req.body.homepage || null,
+            req.session.user
+        )
+            .then(() => {
+                res.redirect("/petition/supporters");
+            })
+            .catch((err) => console.log(err));
     }
 });
 

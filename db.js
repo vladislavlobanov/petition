@@ -35,7 +35,7 @@ module.exports.showSupporters = () => {
     return db.query(`SELECT users.first AS firstName, users.last AS lastName, signatures.signature AS signature, profiles.age AS age, profiles.city AS city, profiles.homepage AS homepage
     FROM users
     INNER JOIN signatures ON users.id = signatures.user_id
-    INNER JOIN profiles ON signatures.user_id = profiles.user_id;
+    LEFT JOIN profiles ON signatures.user_id = profiles.user_id;
     `);
 };
 
@@ -92,5 +92,46 @@ module.exports.provideInfo = (id) => {
         INNER JOIN profiles ON users.id = profiles.user_id
         WHERE users.id = ($1)`,
         [id]
+    );
+};
+
+module.exports.makeUpdatesNoPwd = (
+    first,
+    last,
+    email,
+    age,
+    city,
+    homepage,
+    idData
+) => {
+    return db.query(
+        `WITH i AS (UPDATE users SET first = ($1), last = ($2), email = ($3) WHERE id = ($4))
+        INSERT INTO profiles (user_id, age, city, homepage)
+        VALUES ($4,$5,$6,$7)
+        ON CONFLICT (user_id)
+        DO UPDATE SET age = ($5), city = ($6), homepage=($7);
+`,
+        [first, last, email, idData, age, city, homepage]
+    );
+};
+
+module.exports.makeUpdatesWPwd = (
+    first,
+    last,
+    email,
+    password,
+    age,
+    city,
+    homepage,
+    idData
+) => {
+    return db.query(
+        `WITH i AS (UPDATE users SET first = ($1), last = ($2), email = ($3), hashed_password=($4) WHERE id = ($5))
+        INSERT INTO profiles (user_id, age, city, homepage)
+        VALUES ($5,$6,$7,$8)
+        ON CONFLICT (user_id)
+        DO UPDATE SET age = ($6), city = ($7), homepage=($8);
+`,
+        [first, last, email, password, idData, age, city, homepage]
     );
 };
