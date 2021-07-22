@@ -2,12 +2,73 @@
 
 * {
     margin: 0;
+
     box-sizing: border-box;
     font-family: "Rubik", sans-serif;
 }
 
 body {
     background-color: #2b2d42;
+}
+
+main {
+    position: relative;
+}
+
+.bgPhoto {
+    background: url("assets/welcome2.jpeg");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.bgPhoto.edit {
+    background: url("assets/profile.jpg");
+    background-size: cover;
+}
+
+.bgPhoto.signedP {
+    background: url("assets/welcome.jpeg");
+    background-size: cover;
+}
+
+.bgPhoto.supportersP {
+    background: url("assets/supporters.jpeg");
+    background-size: cover;
+}
+
+.bgPhoto.supportersP2 {
+    background: url("assets/supporters2.jpeg");
+    background-size: cover;
+}
+
+.bgPhoto.logPh {
+    background: url("assets/comp.jpeg");
+    background-size: cover;
+}
+
+.bgOverlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: rgba(237, 242, 244, 0.25);
+}
+
+.bgOverlay.edit {
+    background-color: rgba(43, 45, 66, 0.25);
+}
+
+.bgOverlay.supportersP {
+    background-color: rgba(239, 35, 60, 0.25);
+}
+
+.bgOverlay.supportersP2 {
+    background-color: rgba(43, 45, 66, 0.25);
+}
+
+.bgOverlay.logPh {
+    background-color: rgba(43, 45, 66, 0.25);
 }
 
 #signatureCanvas {
@@ -36,16 +97,11 @@ body {
     height: 100%;
 }
 
-main {
-    width: 100%;
-    height: 100%;
-}
-
 .leftWContainer,
 .rightWContainer {
     flex-grow: 1;
     flex-basis: 0;
-    min-width: 500px;
+    min-width: 600px;
     z-index: 5;
 }
 
@@ -132,6 +188,7 @@ h1 {
     width: 80%;
     border-radius: 10px;
     color: #ef233c;
+    text-transform: uppercase;
 }
 
 h1::after {
@@ -166,6 +223,7 @@ input {
     border-color: #8d99ae;
     background: transparent;
     font-size: 17px;
+    width: 200px;
 }
 input:focus {
     border-color: #ef233c;
@@ -330,4 +388,20 @@ li {
 
 li:last-child {
     padding-bottom: 0px;
+}
+
+@media screen and (max-width: 1400px) {
+    .leftWContainer {
+        background-image: url("assets/navalnymain.jpg");
+        background-position: 10%;
+        background-size: cover;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .leftWContainer {
+        background-image: url("assets/navalnymain.jpg");
+        background-position: 12%;
+        background-size: cover;
+    }
 }
