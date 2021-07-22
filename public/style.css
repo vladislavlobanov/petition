@@ -48,6 +48,11 @@ main {
     background-size: cover;
 }
 
+.bgPhoto.prChange {
+    background: url("assets/Navalny-protest-russia-putin-GettyImages-1204104189.jpg");
+    background-size: cover;
+}
+
 .bgOverlay {
     height: 100%;
     width: 100%;
@@ -60,7 +65,7 @@ main {
 }
 
 .bgOverlay.supportersP {
-    background-color: rgba(239, 35, 60, 0.25);
+    background-color: rgba(237, 242, 244, 0.25);
 }
 
 .bgOverlay.supportersP2 {
@@ -68,6 +73,10 @@ main {
 }
 
 .bgOverlay.logPh {
+    background-color: rgba(43, 45, 66, 0.25);
+}
+
+.bgOverlay.prChange {
     background-color: rgba(43, 45, 66, 0.25);
 }
 
