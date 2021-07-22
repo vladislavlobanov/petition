@@ -5,7 +5,7 @@
 
     var drawing;
 
-    ctx.strokeStyle = "blue";
+    ctx.strokeStyle = "red";
     ctx.lineWidth = 3;
     ctx.lineCap = "round";
 

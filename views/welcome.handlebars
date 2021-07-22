@@ -21,7 +21,8 @@
         <div class="insideContainer">
             <h1 class="regEl">SHOW YOUR SUPPORT</h1>
             <div class="bannerRegister">#FREENAVALNY</div>
-            <div class="regEl frameContainer" style="justify-self: center;">
+            <form class="regEl frameContainer center" method="POST">
+                 
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Quod, ea accusamus, distinctio doloribus expedita deserunt
                     ratione rerum porro est totam, eaque dicta inventore
@@ -29,35 +30,23 @@
                     tempora tempore sequi. Quam quia explicabo totam repellendus
                     voluptatibus, commodi doloremque saepe laudantium, corporis,
                     amet earum? Alias, a quas.</p>
+                {{>error status=smthWrong}}
+                <input type="hidden" id="hiddenFieldId" name="hiddenField" />
+                <div class="wrapper">
+                    <div style="font-size: 15px; font-weight:bold;">SIGN HERE</div>
+                    <canvas
+                        id="signatureCanvas"
+                        width="350"
+                        height="200"
+                    ></canvas>
+                </div>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                <div class="wrapper"><button> SUBMIT MY SIGNATURE</button></div>
+               
             </div>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-            <div class="wrapper"><button> SUBMIT MY SIGNATURE</button></div>
+
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="/script.js"></script>
     </div>
 </div>
-
-{{!-- 
-   <form class="regEl" method="POST">
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Quod, ea accusamus, distinctio doloribus expedita deserunt
-                    ratione rerum porro est totam, eaque dicta inventore
-                    voluptates aut. Repudiandae beatae in mollitia iure at
-                    tempora tempore sequi. Quam quia explicabo totam repellendus
-                    voluptatibus, commodi doloremque saepe laudantium, corporis,
-                    amet earum? Alias, a quas.</p>
-                {{!-- {{>error status=smthWrong}} --}}
-{{!-- <input type="hidden" id="hiddenFieldId" name="hiddenField" />
-                <div class="sigContainer">
-                    <canvas
-                        id="signatureCanvas"
-                        width="300"
-                        height="100"
-                    ></canvas>
-                </div>
-                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-                <button> SUBMIT MY SIGNATURE </button>
-
-            </form> --}}

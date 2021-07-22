@@ -4,20 +4,37 @@
 
             <form class="frameContainer" method="POST">
 
-                <h1 class="regEl">Thank you for signing!</h1>
+                <h1 class="regEl">THANK YOU FOR SIGNING</h1>
                 <div class="bannerRegister">#FREENAVALNY</div>
 
                 <div class="regEl">
-
-                    <img src="{{imgSig}}" alt="signature" />
-                    <div><a href="/petition/supporters">SEE ALL
-                            {{numSigned}}
-                            SUPPORTERS</a></div>
-                    <div><a href="/edit">Edit my profile</a></div>
-                    <button>DELETE MY SIGNATURE</button>
+                    <div class="frameContainer center">
+                        <div>
+                            <div style="font-size: 15px; font-weight:bold;">YOUR
+                                SIGNATURE</div>
+                            <div class="sigContainer">
+                                <img
+                                    width="350"
+                                    height="200"
+                                    src="{{imgSig}}"
+                                    alt="signature"
+                                /></div>
+                        </div>
+                        <div><a
+                                style="font-weight: bold;"
+                                href="/petition/supporters"
+                            >SEE ALL
+                                {{numSigned}}
+                                SUPPORTERS</a></div>
+                        <div><a style="font-weight: bold;" href="/edit">EDIT MY
+                                PROFILE</a></div>
+                        <div class="wrapper"><button>DELETE MY SIGNATURE</button></div>
+                    </div>
                 </div>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
             </form>
+
         </div></div>
 
 </div>

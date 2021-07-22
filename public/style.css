@@ -11,12 +11,21 @@ body {
 }
 
 #signatureCanvas {
-    background-color: yellow;
+    background-color: white;
+    border: 1px red solid;
 }
 
 #sigPic {
-    width: 300;
-    height: 100;
+    width: 350;
+    height: 200;
+}
+
+.sigContainer {
+    background-color: white;
+    width: 350;
+    height: 200;
+    margin: 0 auto;
+    clear: both;
 }
 
 .welcomeContainer {
@@ -249,22 +258,22 @@ button:hover::after {
     z-index: 3;
 }
 
-.frameContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.frameContainer .center {
-    text-align: center;
-}
-
 .regEl {
     background-color: #edf2f4;
     border-radius: 10px;
     padding: 30px;
     width: 100%;
     z-index: 2;
+}
+
+.frameContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.frameContainer.center {
+    text-align: center;
 }
 
 /* REGISTRATION END */
@@ -283,4 +292,16 @@ button:hover::after {
 
 .orgInputs {
     padding-bottom: 10px;
+}
+
+.buttonLink {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
 }
