@@ -189,4 +189,9 @@ router.post("/edit", (req, res) => {
     }
 });
 
+router.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/petition");
+});
+
 module.exports = router;

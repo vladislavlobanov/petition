@@ -5,32 +5,37 @@
 
             <div class="frameContainer" method="POST">
 
-                <h1 class="regEl">All supporters</h1>
+                <h1 class="regEl">ALL SUPPORTERS</h1>
                 <div class="bannerRegister">#FREENAVALNY</div>
 
                 <div class="regEl">
-                    <ol>
-                        {{#arr}}
-                            <li>
-                                {{#if homepage}}<a
-                                        href="
-        {{homepage}}"
-                                    >{{firstname}}
-                                        {{lastname}}</a>
-                                {{else}}
-                                    {{firstname}}
-                                    {{lastname}}
-                                {{/if}}
-                                {{#if age}} {{age}} {{/if}}
+                    <div class="organizeOl">
+                        <div class="liWrapper">
+                            <ol>
+                                {{#arr}}
+                                    <li>
+                                        {{#if homepage}}<a
+                                                href="{{homepage}}"
+                                            >{{firstname}}
+                                                {{lastname}}</a>
+                                        {{else}}
+                                            {{firstname}}
+                                            {{lastname}}
+                                        {{/if}}
+                                        {{#if age}}| {{age}} years old |{{/if}}
 
-                                {{#if city}}
-                                    <a href="{{city}}">{{city}}
-                                    </a>
+                                        {{#if city}}
+                                            <a href="{{city}}">{{city}}
+                                            </a>
 
-                                {{/if}}</li>
-                        {{/arr}}
-                    </ol>
+                                        {{/if}}</li>
+                                {{/arr}}
+                            </ol>
+                        </div>
+                        <div><a style="font-weight: bold;" href="/logout">LOG
+                                OUT</a></div>
 
+                    </div>
                 </div>
 
                 <input type="hidden" name="_csrf" value="{{csrfToken}}" />

@@ -155,14 +155,20 @@ h2::after {
 
 label {
     display: inline-block;
-    width: 100px;
+    width: 110px;
     text-align: left;
     font-weight: bolder;
     text-transform: uppercase;
 }
 input {
-    margin-right: 10px;
-    width: 13em;
+    outline: 0;
+    border-width: 0 0 3px;
+    border-color: #8d99ae;
+    background: transparent;
+    font-size: 17px;
+}
+input:focus {
+    border-color: #ef233c;
 }
 
 /* button {
@@ -209,14 +215,14 @@ canvas {
 
 button {
     font-size: 20px;
-    font-weight: 200;
+    font-weight: 400;
     letter-spacing: 1px;
     outline: 0;
-    border: 1px solid black;
+    border: 1px solid #2b2d42;
     cursor: pointer;
     position: relative;
     background-color: rgba(0, 0, 0, 0);
-    width: 200px;
+    width: 300px;
 }
 
 button::after {
@@ -304,4 +310,24 @@ button:hover::after {
     color: #069;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.organizeOl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.liWrapper {
+    width: fit-content;
+}
+
+li {
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+li:last-child {
+    padding-bottom: 0px;
 }

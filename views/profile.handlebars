@@ -12,6 +12,7 @@
                     {{>error status=smthWrong}} 
                     <div class="frameContainer center">
                         <div>
+                        <div class="orgInputs">
                             <label for="ageId">Age:</label>
                             <input
                                 type="number"
@@ -21,11 +22,11 @@
                                 max="100"
                             /></div>
 
-                        <div>
+                        <div class="orgInputs">
                             <label for="cityId">City:</label>
                             <input type="text" id="cityId" name="city" /></div>
 
-                        <div>
+                        <div class="orgInputs" style="padding-bottom: 0;">
                             <label for="homepageId">Homepage:</label>
 
                             <input
@@ -37,13 +38,16 @@
                             />
 
                         </div>
-
+</div>
                         <input
                             type="hidden"
                             name="_csrf"
                             value="{{csrfToken}}"
                         />
                         <div class="wrapper"><button>CONTINUE</button></div>
+                                                <div><a style="font-weight: bold;" href="/logout">LOG
+                                OUT</a></div>
+
                     </div>
                 </div>
             </form>
