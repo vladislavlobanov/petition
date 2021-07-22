@@ -1,38 +1,52 @@
 <div class="frameHolder">
 
-    <div class="insideframeHolder">    
-    <div class="frame">
+    <div class="insideframeHolder">
+        <div class="frame">
+            <form class="frameContainer" method="POST">
 
-        <form class="frameContainer" method="POST">
-            
-            <h1 class="regEl">Now please tell us just a littlbe bit more about yourself</h1>
-                    <div class="bannerRegister">#FREENAVALNY</div>
+                <h1 class="regEl">TELL US ABOUT YOURESELF</h1>
+                <div class="bannerRegister">#FREENAVALNY</div>
 
-            <div class="regEl">
+                <div class="regEl">
 
-          
-                {{>error status=smthWrong}} 
-              <div class="nameContainer">
+                    {{>error status=smthWrong}} 
+                    <div class="frameContainer center">
+                        <div>
+                            <label for="ageId">Age:</label>
+                            <input
+                                type="number"
+                                id="ageId"
+                                name="age"
+                                min="18"
+                                max="100"
+                            /></div>
 
-        <div>
-            <label for="ageId">Age:</label>
-            <input type="number" id="ageId" name="age" min="18" max="100"/></div>
+                        <div>
+                            <label for="cityId">City:</label>
+                            <input type="text" id="cityId" name="city" /></div>
 
-        <div>
-            <label for="cityId">City:</label>
-            <input type="text" id="cityId" name="city" /></div>
-        <div>
-            <label for="homepageId">Homepage:</label>
+                        <div>
+                            <label for="homepageId">Homepage:</label>
 
-             <input type="text" pattern="https?://.+" id="homapageId" name="homepage"  placeholder="http://example.com">
+                            <input
+                                type="text"
+                                pattern="https?://.+"
+                                id="homapageId"
+                                name="homepage"
+                                placeholder="http://example.com"
+                            />
 
-    </div>
+                        </div>
 
-                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-               <button>CONTINUE</button>
-
-        </form>
-
-    </div></div>
+                        <input
+                            type="hidden"
+                            name="_csrf"
+                            value="{{csrfToken}}"
+                        />
+                        <div class="wrapper"><button>CONTINUE</button></div>
+                    </div>
+                </div>
+            </form>
+        </div></div>
 
 </div>

@@ -1,39 +1,40 @@
 <div class="frameHolder">
 
     <div class="insideframeHolder">
+       
         <div class="frame">
-
             <form class="frameContainer" method="POST">
-
                 <h1 class="regEl">REGISTRATION</h1>
                 <div class="bannerRegister">#FREENAVALNY</div>
 
                 <div class="regEl">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    <div class="frameContainer center">
+                           <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                         Iusto rerum eaque suscipit assumenda ipsa sapiente
                         excepturi cumque illo, aliquid aliquam?</p>
                    {{>error status=smthWrong}} 
-                    <div class="nameContainer">
                         <div>
-                            <label for="firstNameId">First name:</label>
+                            <div class="orgInputs">        <label for="firstNameId">First name:</label>
                             <input
                                 type="text"
                                 id="firstNameId"
                                 name="firstName"
                                 required
                             /></div>
-                        <div>
-                            <label for="lastNameId">Last name:</label>
+                    
+
+                            <div class="orgInputs"> <label for="lastNameId">Last name:</label>
                             <input
                                 type="text"
                                 id="lastNameId"
                                 name="lastName"
                                 required
-                            />
-                        </div>
-
+                            /></div>
+                            
+                            </div>
+                        
                         <div>
-                            <label for="emailId">Email address:</label>
+                            <div class="orgInputs">  <label for="emailId">Email:</label>
                             <input
                                 type="text"
                                 id="emailId"
@@ -42,22 +43,26 @@
                                 pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
                                 required
                             /></div>
-
-                        <div>
-                            <label for="passwordId">Password:</label>
+                          
+                             <div class="orgInputs">    <label for="passwordId">Password:</label>
                             <input
                                 type="password"
                                 id="passwordId"
                                 name="password"
                                 required
                             /></div>
+                            
+                            </div>
 
+                        
+                        
+ <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+                    <div class="wrapper"><button> SIGN UP </button></div>
+                    <p style="font-weight: bolder; font-">If you are already a member, please
+                        <a  href="/login">log in</a></p></div>
                     </div>
 
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-                    <button> SIGN UP </button>
-                    <p>If you are already a member, please
-                        <a href="/login">log in</a></p></div>
+                   
 
             </form>
 

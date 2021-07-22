@@ -19,9 +19,27 @@
 
     <div class="rightWContainer">
         <div class="insideContainer">
-            <h1 class="regEl">Show your support!</h1>
+            <h1 class="regEl">SHOW YOUR SUPPORT</h1>
             <div class="bannerRegister">#FREENAVALNY</div>
-            <form class="regEl" method="POST">
+            <div class="regEl frameContainer" style="justify-self: center;">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Quod, ea accusamus, distinctio doloribus expedita deserunt
+                    ratione rerum porro est totam, eaque dicta inventore
+                    voluptates aut. Repudiandae beatae in mollitia iure at
+                    tempora tempore sequi. Quam quia explicabo totam repellendus
+                    voluptatibus, commodi doloremque saepe laudantium, corporis,
+                    amet earum? Alias, a quas.</p>
+            </div>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            <div class="wrapper"><button> SUBMIT MY SIGNATURE</button></div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="/script.js"></script>
+    </div>
+</div>
+
+{{!-- 
+   <form class="regEl" method="POST">
 
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Quod, ea accusamus, distinctio doloribus expedita deserunt
@@ -30,8 +48,8 @@
                     tempora tempore sequi. Quam quia explicabo totam repellendus
                     voluptatibus, commodi doloremque saepe laudantium, corporis,
                     amet earum? Alias, a quas.</p>
-                {{>error status=smthWrong}}
-                <input type="hidden" id="hiddenFieldId" name="hiddenField" />
+                {{!-- {{>error status=smthWrong}} --}}
+{{!-- <input type="hidden" id="hiddenFieldId" name="hiddenField" />
                 <div class="sigContainer">
                     <canvas
                         id="signatureCanvas"
@@ -41,10 +59,5 @@
                 </div>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}" />
                 <button> SUBMIT MY SIGNATURE </button>
-            </form>
 
-        </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="/script.js"></script>
-    </div>
-</div>
+            </form> --}}

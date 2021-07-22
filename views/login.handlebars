@@ -4,35 +4,47 @@
         <div class="frame">
             <form class="frameContainer" method="POST">
 
-                <h1 class="regEl">Please log in</h1>
+                <h1 class="regEl">PLEASE LOG IN</h1>
                 <div class="bannerRegister">#FREENAVALNY</div>
 
                 <div class="regEl">
-                {{>error status=smthWrong}} 
-                    <div>
-                        <label for="emailId">Email address:</label>
-                        <input
-                            type="text"
-                            id="emailId"
-                            name="email"
-                            placeholder="your@email.com"
-                            pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-                            required
-                        /></div>
+                    <div class="frameContainer center">
 
-                    <div>
-                        <label for="passwordId">Password:</label>
+                        {{>error status=smthWrong}} 
+                        <div>
+                            <div class="orgInputs">
+                                <label for="emailId">Email:</label>
+                                <input
+                                    type="text"
+                                    id="emailId"
+                                    name="email"
+                                    placeholder="your@email.com"
+                                    pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                                    required
+                                />
+                            </div>
+                            <div class="orgInputs">
+                                <label for="passwordId">Password:</label>
+                                <input
+                                    type="password"
+                                    type="text"
+                                    id="passwordId"
+                                    name="password"
+                                    required
+                                />
+
+                            </div>
+                        </div>
+
                         <input
-                            type="password"
-                            type="text"
-                            id="passwordId"
-                            name="password"
-                            required
+                            type="hidden"
+                            name="_csrf"
+                            value="{{csrfToken}}"
                         />
+                        <div class="wrapper"><button> LOG IN</button></div>
+
                     </div>
 
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-                    <button>LOG IN</button>
                 </div>
 
             </form>

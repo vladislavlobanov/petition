@@ -37,6 +37,7 @@ main {
     flex-grow: 1;
     flex-basis: 0;
     min-width: 500px;
+    z-index: 5;
 }
 
 .leftWContainer {
@@ -130,12 +131,32 @@ h1::after {
     display: block;
 }
 
+h2 {
+    /* font-size:3,5rem */
+    width: 80%;
+    border-radius: 10px;
+    color: #ef233c;
+}
+
+h2::after {
+    content: " ";
+    border-top: 5px solid #d90429;
+    display: block;
+}
+
 label {
     display: inline-block;
     width: 100px;
+    text-align: left;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+input {
+    margin-right: 10px;
+    width: 13em;
 }
 
-button {
+/* button {
     font-size: 20px;
     font-weight: 200;
     letter-spacing: 1px;
@@ -144,7 +165,7 @@ button {
     cursor: pointer;
     position: relative;
     background-color: transparent;
-}
+} */
 
 canvas {
     cursor: pointer;
@@ -177,6 +198,34 @@ canvas {
     align-items: center;
 }
 
+button {
+    font-size: 20px;
+    font-weight: 200;
+    letter-spacing: 1px;
+    outline: 0;
+    border: 1px solid black;
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0);
+    width: 200px;
+}
+
+button::after {
+    content: "";
+    background-color: #ef233c;
+    width: 100%;
+    z-index: -3;
+    position: absolute;
+    height: 100%;
+    top: 7px;
+    left: 7px;
+    transition: 0.2s;
+}
+button:hover::after {
+    top: 0px;
+    left: 0px;
+}
+
 .insideframeHolder {
     width: 40rem;
     height: fit-content;
@@ -195,9 +244,9 @@ canvas {
 
 .frame {
     background-color: #8d99ae;
-
     border-radius: 10px;
     padding: 1em;
+    z-index: 3;
 }
 
 .frameContainer {
@@ -206,11 +255,16 @@ canvas {
     gap: 20px;
 }
 
+.frameContainer .center {
+    text-align: center;
+}
+
 .regEl {
     background-color: #edf2f4;
     border-radius: 10px;
     padding: 30px;
     width: 100%;
+    z-index: 2;
 }
 
 /* REGISTRATION END */
@@ -223,4 +277,10 @@ canvas {
     border-radius: 10px;
     grid-template-rows: max-content max-content 1fr;
     padding: 1em;
+    z-index: -5;
+    position: relative;
+}
+
+.orgInputs {
+    padding-bottom: 10px;
 }
