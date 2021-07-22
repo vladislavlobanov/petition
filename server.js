@@ -4,7 +4,13 @@ const db = require("./db");
 const hb = require("express-handlebars");
 const csurf = require("csurf");
 const bcrypt = require("./bcrypt");
-const cookieSession = require("cookie-session"); // VAR?
+const cookieSession = require("cookie-session");
+const {
+    requireLoggedOutUser,
+    requireLoggedInUser,
+    requireNoSignature,
+    requireSignature,
+} = require("./middleware");
 
 var smthWrong;
 
@@ -34,46 +40,53 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use((req, res, next) => {
-    if (
-        !req.session.sigId &&
-        (req.url == "/petition/supporters" || req.url == "/petition/signed")
-    ) {
-        res.redirect("/petition");
-    } else next();
-});
+app.use(requireLoggedInUser);
 
 app.get("/", (req, res) => {
     res.redirect("/petition");
 });
 
-app.get("/petition", (req, res) => {
-    if (!req.session.user) {
-        res.redirect("/register");
-    } else {
-        if (req.session.sigId) {
-            res.redirect("/petition/signed");
-        } else {
-            smthWrong = false;
-            res.render("welcome", {
-                layout: "main",
-            });
-        }
-    }
+app.get("/petition", requireNoSignature, (req, res) => {
+    smthWrong = false;
+    res.render("welcome", {
+        layout: "main",
+    });
 });
 
-app.get("/register", (req, res) => {
-    if (req.session.user) {
-        res.redirect("/petition");
-    } else {
-        smthWrong = false;
-        res.render("register", {
+app.post("/petition", requireNoSignature, (req, res) => {
+    if (req.body.hiddenField == "") {
+        smthWrong = true;
+        res.render("welcome", {
             layout: "main",
+            smthWrong,
         });
+    } else {
+        db.sendInputs(req.session.user, req.body.hiddenField)
+            .then((rData) => {
+                smthWrong = false;
+                req.session.sigId = rData.rows[0].id;
+                res.redirect("/petition/signed");
+            })
+            .catch((err) => {
+                console.log(err);
+                smthWrong = true;
+                res.render("welcome", {
+                    layout: "main",
+                    smthWrong,
+                });
+            });
     }
 });
 
-app.post("/register", (req, res) => {
+app.get("/register", requireLoggedOutUser, (req, res) => {
+    console.log(req.session);
+    smthWrong = false;
+    res.render("register", {
+        layout: "main",
+    });
+});
+
+app.post("/register", requireLoggedOutUser, (req, res) => {
     if (
         !req.body.firstName ||
         !req.body.lastName ||
@@ -114,15 +127,11 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-    if (!req.session.user) {
-        res.redirect("/register");
-    } else {
-        smthWrong = false;
-        res.render("profile", {
-            layout: "main",
-            smthWrong,
-        });
-    }
+    smthWrong = false;
+    res.render("profile", {
+        layout: "main",
+        smthWrong,
+    });
 });
 
 app.post("/profile", (req, res) => {
@@ -149,19 +158,15 @@ app.post("/profile", (req, res) => {
     }
 });
 
-app.get("/login", (req, res) => {
-    if (req.session.user) {
-        res.redirect("/petition");
-    } else {
-        smthWrong = false;
-        res.render("login", {
-            layout: "main",
-            smthWrong,
-        });
-    }
+app.get("/login", requireLoggedOutUser, (req, res) => {
+    smthWrong = false;
+    res.render("login", {
+        layout: "main",
+        smthWrong,
+    });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", requireLoggedOutUser, (req, res) => {
     if (!req.body.email || !req.body.password) {
         smthWrong = true;
         res.render("register", {
@@ -203,7 +208,7 @@ app.post("/login", (req, res) => {
     }
 });
 
-app.get("/petition/signed", (req, res) => {
+app.get("/petition/signed", requireSignature, (req, res) => {
     var firstPromise = db.getSignature(req.session.sigId).then((results) => {
         return results.rows[0].signature;
     });
@@ -227,14 +232,14 @@ app.get("/petition/signed", (req, res) => {
         });
 });
 
-app.post("/petition/signed", (req, res) => {
+app.post("/petition/signed", requireSignature, (req, res) => {
     db.deleteSignature(req.session.user).then(() => {
         req.session.sigId = "";
         res.redirect("/petition");
     });
 });
 
-app.get("/petition/supporters", (req, res) => {
+app.get("/petition/supporters", requireSignature, (req, res) => {
     db.showSupporters().then((results) => {
         var arr = results.rows;
         res.render("supporters", {
@@ -244,68 +249,35 @@ app.get("/petition/supporters", (req, res) => {
     });
 });
 
-app.get("/petition/:city", (req, res) => {
-    if (!req.session.sigId) {
-        res.redirect("/petition");
-    } else {
-        const { city: cityParam } = req.params;
-        db.showCity(cityParam).then((results) => {
-            var arr = results.rows;
-            res.render("supporters-by-city", {
-                layout: "main",
-                cityParam,
-                arr,
-            }); //showmessage smth went wrong STILL have to do it visually
-        });
-    }
-});
-
-app.post("/petition", (req, res) => {
-    if (req.body.hiddenField == "") {
-        smthWrong = true;
-        res.render("welcome", {
+app.get("/petition/:city", requireSignature, (req, res) => {
+    const { city: cityParam } = req.params;
+    db.showCity(cityParam).then((results) => {
+        var arr = results.rows;
+        res.render("supporters-by-city", {
             layout: "main",
-            smthWrong,
-        });
-    } else {
-        db.sendInputs(req.session.user, req.body.hiddenField)
-            .then((rData) => {
-                smthWrong = false;
-                req.session.sigId = rData.rows[0].id;
-                res.redirect("/petition/signed");
-            })
-            .catch((err) => {
-                console.log(err);
-                smthWrong = true;
-                res.render("welcome", {
-                    layout: "main",
-                    smthWrong,
-                });
-            });
-    }
+            cityParam,
+            arr,
+        }); //showmessage smth went wrong STILL have to do it visually
+    });
 });
 
 app.get("/edit", (req, res) => {
-    if (!req.session.user) {
-        res.redirect("/register");
-    } else {
-        db.provideInfo(req.session.user)
-            .then((results) => {
-                const { firstname, lastname, email, age, city, homepage } =
-                    results.rows[0];
+    db.provideInfo(req.session.user)
+        .then((results) => {
+            const { firstname, lastname, email, age, city, homepage } =
+                results.rows[0];
 
-                res.render("edit", {
-                    layout: "main",
-                    firstname,
-                    lastname,
-                    email,
-                    age,
-                    city,
-                    homepage,
-                });
-            })
-            .catch((err) => console.log(err));
-    }
+            res.render("edit", {
+                layout: "main",
+                firstname,
+                lastname,
+                email,
+                age,
+                city,
+                homepage,
+            });
+        })
+        .catch((err) => console.log(err));
 });
 
 app.post("/edit", (req, res) => {

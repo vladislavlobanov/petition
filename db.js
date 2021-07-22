@@ -89,7 +89,7 @@ module.exports.provideInfo = (id) => {
     return db.query(
         `SELECT users.first AS firstName, users.last AS lastName, users.email AS email, profiles.age AS age, profiles.city as city, profiles.homepage AS homepage
         FROM users
-        INNER JOIN profiles ON users.id = profiles.user_id
+        LEFT JOIN profiles ON users.id = profiles.user_id
         WHERE users.id = ($1);`,
         [id]
     );
