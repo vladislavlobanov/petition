@@ -45,7 +45,7 @@ module.exports.showCity = (city) => {
     FROM users 
     INNER JOIN signatures ON users.id = signatures.user_id
     INNER JOIN profiles ON signatures.user_id = profiles.user_id
-    WHERE profiles.city = ($1);
+    WHERE LOWER(profiles.city) = LOWER($1);
     `,
         [city]
     );

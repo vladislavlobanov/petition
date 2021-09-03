@@ -13,6 +13,17 @@ router.get("/register", requireLoggedOutUser, (req, res) => {
 });
 
 router.post("/register", requireLoggedOutUser, (req, res) => {
+    const emailFormat =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!emailFormat.test(req.body.email)) {
+        smthWrong = true;
+        return res.render("register", {
+            layout: "main",
+            smthWrong,
+        });
+    }
+
     if (
         !req.body.firstName ||
         !req.body.lastName ||
@@ -61,6 +72,19 @@ router.get("/profile", (req, res) => {
 });
 
 router.post("/profile", (req, res) => {
+    if (
+        (req.body.age && (req.body.age > 100 || !req.body.age < 18)) ||
+        (req.body.homepage &&
+            (!req.body.homepage.startsWith("http://") ||
+                !req.body.homepage.startsWith("https://")))
+    ) {
+        smthWrong = true;
+        return res.render("profile", {
+            layout: "main",
+            smthWrong,
+        });
+    }
+
     if (!req.body.age && !req.body.city && !req.body.homepage) {
         res.redirect("/petition");
     } else {
@@ -154,10 +178,40 @@ router.get("/edit", (req, res) => {
 });
 
 router.post("/edit", (req, res) => {
+    const emailFormat =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (
+        !emailFormat.test(req.body.email) ||
+        !req.body.firstName ||
+        !req.body.lastName
+    ) {
+        smthWrong = true;
+        return res.render("edit", {
+            layout: "main",
+            smthWrong,
+        });
+    }
+
     if (req.body.password) {
         bcrypt
             .hash(req.body.password)
             .then((hashPwd) => {
+                if (
+                    (req.body.age &&
+                        (req.body.age > 100 || !req.body.age < 18)) ||
+                    (req.body.email && !emailFormat.test(req.body.email)) ||
+                    (req.body.homepage &&
+                        (!req.body.homepage.startsWith("http://") ||
+                            !req.body.homepage.startsWith("https://")))
+                ) {
+                    smthWrong = true;
+                    return res.render("edit", {
+                        layout: "main",
+                        smthWrong,
+                    });
+                }
+
                 db.makeUpdatesWPwd(
                     req.body.firstName,
                     req.body.lastName,
@@ -173,6 +227,19 @@ router.post("/edit", (req, res) => {
             })
             .catch((err) => console.log(err));
     } else {
+        if (
+            (req.body.age && (req.body.age > 100 || !req.body.age < 18)) ||
+            (req.body.email && !emailFormat.test(req.body.email)) ||
+            (req.body.homepage &&
+                (!req.body.homepage.startsWith("http://") ||
+                    !req.body.homepage.startsWith("https://")))
+        ) {
+            smthWrong = true;
+            return res.render("edit", {
+                layout: "main",
+                smthWrong,
+            });
+        }
         db.makeUpdatesNoPwd(
             req.body.firstName,
             req.body.lastName,

@@ -12,7 +12,7 @@ router.get("/petition/signed", requireSignature, (req, res) => {
         return results.rows.length;
     });
 
-    Promise.all([firstPromise, secondPromise]) //MAYBE REWRITE USING A CHAIN
+    Promise.all([firstPromise, secondPromise])
         .then((values) => {
             var imgSig = values[0];
             var numSigned = values[1];
@@ -23,7 +23,7 @@ router.get("/petition/signed", requireSignature, (req, res) => {
             });
         })
         .catch((err) => {
-            console.log("Error in one of the promises" + err); //showmessage smth went wrong STILL have to do it visually
+            console.log("Error in one of the promises" + err);
         });
 });
 
@@ -40,7 +40,7 @@ router.get("/petition/supporters", requireSignature, (req, res) => {
         res.render("supporters", {
             layout: "main",
             arr,
-        }); //showmessage smth went wrong STILL have to do it visually
+        });
     });
 });
 
@@ -52,7 +52,7 @@ router.get("/petition/:city", requireSignature, (req, res) => {
             layout: "main",
             cityParam,
             arr,
-        }); //showmessage smth went wrong STILL have to do it visually
+        });
     });
 });
 
